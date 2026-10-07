@@ -4,140 +4,503 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#174c3c">
-  <title>مانسيك | تسجيل الزبائن</title>
+  <meta name="referrer" content="no-referrer">
+  <meta name="description" content="مانسيك — لوحة متابعة زبائن المحل. البحث والتصفية وعرض المواقع، مع وضع تجريبي منفصل.">
+  <title>مانسيك | لوحة الزبائن</title>
   <style>
-    :root{--bg:#f5f6f3;--surface:#fff;--ink:#233c33;--green:#205b47;--green-dark:#153f31;--border:#e6eae4;--radius:18px}
-    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,sans-serif;display:grid;place-items:center;min-height:100vh;padding:20px}
-    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:25px;max-width:400px;width:100%;box-shadow:0 5px 20px rgba(0,0,0,0.05);text-align:center}
-    
-    /* تصميم شعار المحل */
-    .logo-container{width:70px;height:70px;margin:0 auto 15px;border-radius:16px;background:#f0f4eb;border:1px solid #d9e4d0;display:grid;place-items:center;overflow:hidden}
-    .logo-container img{width:100%;height:100%;object-fit:cover}
-    .logo-placeholder{font-size:24px;font-weight:bold;color:var(--green)}
-
-    h1{font-size:20px;margin:0 0 8px}
-    p{color:#7a867f;font-size:12px;margin:0 0 15px;line-height:1.6}
-    input{width:100%;height:45px;padding:10px 15px;border:1px solid var(--border);border-radius:10px;font-size:14px;text-align:center;direction:ltr;margin-bottom:12px;outline:none}
-    input:focus{border-color:var(--green)}
-    .btn{width:100%;height:45px;background:var(--green);color:#fff;border:0;border-radius:10px;font-size:14px;font-weight:bold;cursor:pointer;transition:background .2s}
-    .btn:hover{background:var(--green-dark)}
-    
-    /* ستايل بانر الأندرويد */
-    .android-banner{background:#edf4ed;border:1px solid #cce0cc;border-radius:10px;padding:12px;margin-bottom:15px;font-size:12px;color:var(--green);display:none}
-    .android-banner button{background:var(--green);color:#fff;border:0;padding:6px 14px;border-radius:6px;margin-top:8px;cursor:pointer;font-weight:bold}
-
-    /* ستايل إرشادات الآيفون */
-    .ios-guide{background:#faf4e8;border:1px solid #eee4d1;border-radius:10px;padding:15px;margin-bottom:15px;font-size:11px;color:#79603b;text-align:right;display:none;line-height:1.8}
-    .ios-guide b{color:#534024;display:block;margin-bottom:5px;font-size:12px}
+    :root{--bg:#f5f6f3;--surface:#fff;--ink:#233c33;--muted:#7a867f;--green:#205b47;--green-dark:#153f31;--soft:#edf4ed;--border:#e6eae4;--gold:#af8951;--cream:#faf4e8;--red:#b44437;--shadow:0 5px 20px #203b2e04;--radius:18px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,"Segoe UI",Arial,sans-serif;font-size:14px;line-height:1.7}button,input,select{font:inherit}button,a,input,select{-webkit-tap-highlight-color:transparent}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.45}a{color:inherit;text-decoration:none}button,select,input{touch-action:manipulation}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #bb965f;outline-offset:4px}button svg,a svg{pointer-events:none}svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;vertical-align:middle;flex-shrink:0}[hidden]{display:none!important}.sprite{position:absolute;width:0;height:0;overflow:hidden}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.skip-link{position:fixed;z-index:100;top:12px;right:12px;transform:translateY(-200%);padding:10px 18px;background:var(--green);color:#fff;border-radius:10px}.skip-link:focus{transform:translateY(0)}
+    .app{min-height:100vh;display:grid;grid-template-columns:226px minmax(0,1fr)}
+    .sidebar{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;padding:32px 22px 22px;border-inline-end:1px solid var(--border);background:#fcfdfb}
+    .brand{display:flex;align-items:center;gap:12px;padding:0 9px 34px}.brandmark{background:var(--green);color:#f0e9d6;border-radius:14px;width:44px;height:44px;display:grid;place-items:center}.brandmark svg{width:28px;height:28px;stroke-width:1.5}.brand-name{font-size:25px;font-weight:bold;line-height:1.35;letter-spacing:-1px}.brand-sub{color:var(--muted);font-size:10px;letter-spacing:2.5px;direction:ltr}.nav-heading{color:#929b94;font-size:11px;margin:0 13px 12px}.nav{display:flex;flex-direction:column;gap:7px}.nav a{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;color:#78837b;font-size:13px}.nav a:hover{background:#f1f4ee}.nav .active{background:var(--soft);color:var(--green);font-weight:bold}.nav .active::after{content:"";width:5px;height:5px;background:var(--green);border-radius:50%;margin-inline-start:auto}.nav a svg{width:18px;height:18px}.sidebar-bottom{margin-top:auto}.side-note{border:1px solid var(--border);background:#f7f9f4;border-radius:13px;padding:17px;margin-bottom:22px}.side-note svg{color:var(--green);margin-bottom:8px}.side-note strong{display:block;font-size:12px}.side-note p{font-size:11px;color:var(--muted);margin:5px 0 0;line-height:1.9}.profile{display:flex;gap:10px;align-items:center;padding-top:18px;border-top:1px solid var(--border)}.profile-avatar{width:37px;height:37px;display:grid;place-items:center;background:#edece3;border-radius:50%;color:#807754}.profile strong{display:block;font-size:12px}.profile span{font-size:10px;color:var(--muted)}
+    .workspace{min-width:0;padding:0 42px 25px;max-width:1580px;width:100%;margin:auto}.topbar{height:86px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:16px}.breadcrumb{display:flex;gap:10px;align-items:center;font-size:12px;color:var(--muted)}.breadcrumb svg{width:15px;height:15px}.breadcrumb b{color:#53665a;font-weight:normal}.header-meta{display:flex;align-items:center;gap:18px}.date-label{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:7px}.date-label svg{width:15px;height:15px}.pill{display:inline-flex;align-items:center;gap:6px;font-size:10px;border:1px solid #dfe8db;padding:4px 10px;border-radius:30px;background:#f6f9f3;white-space:nowrap}.pill .dot,.live-dot{width:6px;height:6px;background:#78a579;border-radius:50%;display:inline-block}.pill[data-mode="live"]{color:var(--green);background:var(--soft)}
+    .hero{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:33px 0 27px}.eyebrow{color:var(--gold);font-size:10px;font-weight:bold;letter-spacing:1px;margin:0 0 7px}.hero h1{margin:0;font-size:29px;font-weight:700;letter-spacing:-1px;line-height:1.55}.hero p{color:var(--muted);font-size:12px;margin:7px 0 0}.actions{display:flex;gap:9px;flex-shrink:0}.btn{min-height:42px;display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--border);border-radius:9px;background:#fff;color:#53685b;padding:9px 15px;font-size:12px;font-weight:bold;transition:background .18s,transform .18s}.btn:hover:not(:disabled){background:#f1f6ee}.btn:active:not(:disabled){transform:translateY(1px)}.btn svg{width:16px;height:16px}.btn-primary{background:var(--green);border-color:var(--green);color:#fff}.btn-primary:hover:not(:disabled){background:var(--green-dark)}.btn-quiet{border:0;background:transparent;padding:8px;color:var(--green)}.icon-only{width:40px;padding:9px}.demo-banner{background:var(--cream);border:1px solid #eee4d1;border-radius:11px;padding:12px 16px;display:flex;align-items:center;gap:11px;color:#8c734d;margin-bottom:24px}.demo-banner>svg{width:17px;height:17px}.demo-banner p{font-size:11px;margin:0;flex:1}.demo-banner strong{color:#79603b;margin-inline-end:6px}.banner-tag{font-size:9px;white-space:nowrap;background:#f0e7d5;border-radius:5px;padding:2px 7px;letter-spacing:.5px}
+    .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin-bottom:26px}.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 20px 16px;box-shadow:var(--shadow);position:relative;overflow:hidden}.stat-head{display:flex;align-items:center;justify-content:space-between;gap:8px}.stat-label{color:#6c7b71;font-size:11px}.stat-icon{height:33px;width:33px;border-radius:10px;background:#eff4ec;display:grid;place-items:center;color:#627c58}.stat:nth-child(2) .stat-icon{background:#f9f1e5;color:#aa8755}.stat:nth-child(3) .stat-icon{background:#eef1f7;color:#7385a5}.stat:nth-child(4) .stat-icon{background:#f3eef6;color:#9981a7}.stat-icon svg{height:17px;width:17px}.stat-number{font-size:31px;font-weight:bold;line-height:1.2;margin:15px 0 12px;font-family:"Segoe UI",Tahoma,sans-serif;letter-spacing:-1px;font-variant-numeric:tabular-nums}.stat-bottom{display:flex;align-items:center;gap:5px;color:#879187;font-size:10px}.stat-bottom svg{width:12px;height:12px}.stat-featured{background:var(--green);border-color:var(--green);color:#fff}.stat-featured .stat-label{color:#d4e3d8}.stat-featured .stat-icon{background:#ffffff12;color:#d6e6d7}.stat-featured .stat-bottom{color:#b0c8b8}.stat-featured:after{position:absolute;content:"";width:120px;height:120px;border:1px solid #ffffff0d;border-radius:50%;left:-55px;bottom:-35px;box-shadow:0 0 0 20px #ffffff03,0 0 0 40px #ffffff02;pointer-events:none}
+    .customers-panel{border:1px solid var(--border);border-radius:var(--radius);background:#fff;box-shadow:var(--shadow);overflow:hidden}.panel-heading{padding:23px 24px 19px;display:flex;align-items:flex-start;justify-content:space-between;gap:16px}.panel-title-row{display:flex;align-items:center;gap:10px}.panel-title-row h2{font-size:17px;margin:0}.count-label{border-radius:6px;background:var(--soft);padding:1px 8px;color:#5a7c5d;font-size:10px;white-space:nowrap}.panel-heading p{margin:5px 0 0;font-size:10px;color:var(--muted)}.last-update{font-size:10px;color:#8b958d;white-space:nowrap;padding-top:4px;display:flex;gap:5px;align-items:center}.last-update svg{width:13px;height:13px}.toolbar{display:flex;gap:12px;align-items:center;margin:0 24px 19px}.search-wrap{position:relative;flex:1;max-width:420px}.search-wrap>svg{position:absolute;right:13px;top:13px;width:16px;height:16px;color:#8f9b90;pointer-events:none}.search-wrap input{width:100%;height:42px;background:#fbfcf9;border:1px solid var(--border);border-radius:9px;outline-offset:2px;padding:8px 38px 8px 40px;color:var(--ink);font-size:11px}.search-wrap input::placeholder{color:#9aa499}.search-clear{position:absolute;left:7px;top:6px;height:30px;width:30px;padding:0;border:0;border-radius:5px;background:transparent;color:#7a877b}.search-clear:hover{background:#edf2ea}.search-clear svg{width:14px;height:14px}.select-wrap{display:flex;gap:7px;align-items:center;min-width:163px;height:42px;border:1px solid var(--border);border-radius:9px;padding:0 11px;background:#fff}.select-wrap svg{width:14px;height:14px;color:#8b978b}.select-wrap select{border:0;min-width:0;max-width:210px;width:100%;background:transparent;color:#657662;font-size:11px;height:100%;cursor:pointer}.scope-tag{margin-inline-start:auto;display:flex;align-items:center;gap:6px;color:#81917b;font-size:10px;white-space:nowrap}.scope-tag svg{width:14px;height:14px}.filter-summary{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 24px 14px;background:#f6f8f3;padding:6px 12px;border-radius:8px;font-size:11px;color:#668064}.filter-summary button{border:0;color:var(--green);background:transparent;font-size:11px;text-decoration:underline;cursor:pointer;min-height:30px}
+    .error-box{margin:0 24px 20px;border:1px solid #efccc5;background:#fff7f5;border-radius:10px;color:#a6473b;padding:14px 16px;display:flex;align-items:center;gap:12px}.error-box p{flex:1;margin:0;font-size:12px}.error-box .btn{background:#fff;color:#a6473b;border-color:#eccac2;white-space:nowrap}.table-scroll{overflow-x:auto}table{width:100%;border-collapse:collapse;text-align:right;table-layout:fixed}thead{background:#f8faf6;color:#8b958c;border-top:1px solid #eef0eb;border-bottom:1px solid #eef0eb}th{height:42px;font-size:10px;font-weight:normal;padding:8px 24px}td{height:79px;padding:12px 24px;border-bottom:1px solid #f0f2ed;font-size:11px;color:#66776b;vertical-align:middle}th:nth-child(1){width:29%}th:nth-child(2){width:18%}th:nth-child(3){width:22%}th:nth-child(4){width:25%}th:nth-child(5){width:6%;padding-inline:10px}td:nth-child(5){padding-inline:10px;text-align:center}tbody tr{transition:background .15s}tbody tr:hover{background:#fcfdf9}tbody tr:last-child td{border-bottom:0}.customer-cell{display:flex;align-items:center;gap:11px}.customer-avatar{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#f0f4eb;color:#809874;flex-shrink:0}.customer-avatar svg{width:16px;height:16px}.customer-avatar.tone-1{background:#f7f0e4;color:#b29b6c}.customer-avatar.tone-2{background:#eef1f5;color:#8d9bb0}.customer-avatar.tone-3{background:#f4eef1;color:#b192a7}.customer-info{min-width:0}.phone{display:block;direction:ltr;text-align:right;color:#405749;font-family:"Segoe UI",Tahoma,sans-serif;font-size:13px;font-weight:600;letter-spacing:.35px;overflow-wrap:anywhere}.row-caption{display:block;color:#a0a79d;font-size:9px;margin-top:2px}.shop-badge{font-family:"Segoe UI",Tahoma,sans-serif;direction:auto;unicode-bidi:plaintext;display:inline-block;font-size:11px;color:#768171;border:1px solid #e8ece2;background:#f8faf5;border-radius:5px;padding:2px 9px;max-width:100%;overflow-wrap:anywhere}.map-link{display:inline-flex;align-items:center;gap:6px;color:#59826b;background:#f1f7ef;padding:4px 9px;border-radius:6px;font-size:10px}.map-link:hover{background:#e4efdf}.map-link svg{width:12px;height:12px}.no-location{display:inline-flex;gap:6px;align-items:center;color:#a6aaa0;font-size:10px}.no-location svg{width:12px;height:12px}.time-date{display:block;font-size:11px;color:#71806e}.time-clock{display:block;font-size:9px;color:#a2aa9e;direction:rtl;margin-top:1px}.row-action{display:inline-grid;place-items:center;width:30px;height:32px;border:0;background:transparent;color:#95a18f;border-radius:6px}.row-action:hover{background:#ecf3e6;color:var(--green)}.row-action svg{width:14px;height:14px}.table-footer{padding:17px 24px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fff}.results-info{font-size:10px;color:#96a08f}.results-info strong{color:#71836a;font-weight:normal}.pagination{display:flex;gap:5px;align-items:center;direction:rtl}.page-button{height:30px;min-width:30px;padding:0 7px;border:1px solid var(--border);border-radius:6px;background:#fff;display:grid;place-items:center;color:#829177;font-size:11px}.page-button svg{width:13px;height:13px}.page-current{background:var(--green);color:#fff;border-color:var(--green)}.page-total{font-size:10px;color:#97a090;padding:0 7px}.load-row{padding:13px 24px;background:#fafcf8;border-top:1px solid var(--border);display:flex;gap:12px;align-items:center;justify-content:center}.load-row p{margin:0;font-size:10px;color:#8a9980}.load-row .btn{min-height:32px;padding:5px 13px;font-size:10px;background:#fff}.empty-state{min-height:280px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 25px;text-align:center}.empty-icon{width:62px;height:62px;background:#f1f5eb;border:1px solid #e7eddf;display:grid;place-items:center;border-radius:19px;color:#8ba07a;margin-bottom:16px}.empty-icon svg{width:27px;height:27px}.empty-state h3{font-size:16px;font-weight:normal;margin:0 0 6px}.empty-state p{font-size:12px;color:var(--muted);max-width:430px;margin:0}.empty-state button{margin-top:16px}.spinner{animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.loading-label{padding:12px 24px;color:#779068;font-size:11px;background:#f7faf3;display:flex;align-items:center;gap:8px;border-top:1px solid var(--border)}.loading-label svg{width:14px;height:14px}
+    .bottom-notes{display:flex;align-items:center;gap:7px;margin:16px 1px 26px;color:#9ba392;font-size:10px}.bottom-notes svg{width:13px;height:13px}.connection-section{border:1px solid var(--border);border-radius:13px;background:#f9fbf6;overflow:hidden}.connection-section summary{list-style:none;display:flex;align-items:center;gap:10px;cursor:pointer;padding:16px 19px;font-size:12px;color:#6b7e60}.connection-section summary::-webkit-details-marker{display:none}.connection-section summary .chevron{margin-inline-start:auto;width:16px;height:16px}.connection-section[open] .chevron{transform:rotate(180deg)}.connection-content{padding:0 22px 20px;color:#7f8c75;font-size:11px;line-height:2}.connection-content p{margin:8px 0}.connection-content code{direction:ltr;unicode-bidi:embed;color:#426440;background:#edf3e6;padding:2px 4px;border-radius:4px;font-size:10px}.connection-content ul{padding-inline-start:20px;margin:8px 0 12px}.connection-content a{color:var(--green);text-decoration:underline}.connection-content .security-note{border-right:2px solid #b49968;padding-right:12px;color:#8d7a57}.footer{display:flex;justify-content:space-between;gap:12px;padding-top:24px;color:#a1a99a;font-size:9px}.footer-brand{letter-spacing:2px;font-size:9px;color:#7a8a70}.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);padding:12px 21px;border:1px solid #3e694a;background:var(--green-dark);box-shadow:0 8px 30px #17382725;color:#fff;border-radius:11px;z-index:30;max-width:90vw;text-align:center;font-size:12px}.noscript{padding:20px;background:#fff0eb;color:var(--red)}
+    @media(min-width:1650px){.workspace{padding-inline:65px}.hero{padding-block:40px}.hero h1{font-size:33px}.stat{padding:24px}.stat-number{font-size:36px}td{height:85px}}
+    @media(max-width:1200px){.app{grid-template-columns:195px minmax(0,1fr)}.sidebar{padding-inline:15px}.workspace{padding-inline:26px}.hero h1{font-size:25px}.stat{padding:16px}.stat-label{font-size:10px}.stat-number{font-size:29px}.toolbar{margin-inline:20px}.scope-tag{display:none}th,td{padding-inline:18px}.panel-heading{padding-inline:20px}.customer-cell{gap:8px}.phone{font-size:12px}.map-link{padding-inline:7px}}
+    @media(max-width:1000px){.app{grid-template-columns:78px minmax(0,1fr)}.sidebar{padding:29px 12px 20px;align-items:center}.brand{padding:0 0 35px}.brand-words,.nav-heading,.nav-label,.sidebar-bottom,.nav .active::after{display:none}.nav a{width:48px;height:48px;justify-content:center;padding:12px}.nav a svg{width:21px;height:21px}.workspace{padding-inline:26px}.header-meta{gap:10px}.stats{gap:12px}.stat-head{align-items:flex-start}.stat-label{font-size:10px;max-width:85px}.stat-icon{height:29px;width:29px;border-radius:8px}.stat-bottom{font-size:9px}.stat-bottom svg{display:none}.toolbar .search-wrap{max-width:none}th,td{padding-inline:14px}.hero .btn{padding-inline:11px;font-size:11px}.hero{gap:14px}.last-update{display:none}}
+    @media(max-width:740px){.app{display:block}.sidebar{height:68px;position:static;flex-direction:row;justify-content:space-between;padding:13px 20px;border:0;border-bottom:1px solid var(--border);width:100%}.brand{padding:0;gap:9px}.brandmark{width:35px;height:35px;border-radius:10px}.brandmark svg{width:24px;height:24px}.brand-words{display:block}.brand-name{font-size:22px}.brand-sub{display:none}.nav{flex-direction:row;gap:4px}.nav a{width:37px;height:37px;padding:9px}.nav a svg{width:17px;height:17px}.workspace{padding:0 20px 24px}.topbar{height:61px}.date-label{display:none}.hero{align-items:flex-start;flex-direction:column;padding:24px 0 21px;gap:17px}.hero h1{font-size:27px}.hero p{font-size:11px}.eyebrow{font-size:9px}.actions{width:100%}.actions .btn-primary{flex:1}.hero .btn{min-height:43px;font-size:11px}.demo-banner{padding:12px;margin-bottom:18px;align-items:flex-start}.demo-banner>svg{margin-top:3px}.demo-banner p{font-size:10px;line-height:1.9}.demo-banner strong{display:block}.banner-tag{display:none}.stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin-bottom:21px}.stat{padding:16px;border-radius:13px}.stat-label{font-size:11px;max-width:none}.stat-number{margin:12px 0 9px;font-size:29px}.stat-bottom{font-size:9px}.panel-heading{padding:18px 16px 15px}.panel-title-row h2{font-size:16px}.panel-heading p{font-size:9px}.toolbar{margin:0 16px 16px;flex-wrap:wrap;gap:8px}.search-wrap{flex-basis:100%}.select-wrap{width:100%;height:39px}.select-wrap select{max-width:none}.filter-summary{margin-inline:16px}.customers-panel{border-radius:14px}.error-box{margin-inline:16px;flex-wrap:wrap}.error-box p{flex-basis:80%;font-size:11px}.error-box .btn{margin-inline-start:auto}table,tbody{display:block}thead{display:none}tbody{padding:0 16px}tbody tr{display:grid;grid-template-columns:1.12fr 1fr;position:relative;gap:13px 12px;padding:17px 0;border-top:1px solid var(--border)}tbody tr:last-child{border-bottom:0}td{display:block;border:0!important;height:auto!important;padding:0!important}td:nth-child(1){grid-column:1;grid-row:1}td:nth-child(2){grid-column:2;grid-row:1;text-align:left;padding-inline-end:29px!important;align-self:center}td:nth-child(3){grid-column:1;grid-row:2;align-self:end;padding-inline-start:42px!important}td:nth-child(4){grid-column:2;grid-row:2;text-align:left;align-self:end}td:nth-child(5){position:absolute;top:19px;left:-4px}.customer-cell{gap:8px}.customer-avatar{height:34px;width:34px}.phone{font-size:12px;letter-spacing:0}.shop-badge{font-size:10px;padding:2px 6px}.time-date{font-size:10px}.time-clock{font-size:9px}.map-link{font-size:9px;padding:4px 7px}.no-location{font-size:9px}.table-footer{padding:14px 16px;flex-wrap:wrap}.results-info{font-size:9px}.pagination{gap:3px}.page-total{font-size:9px;padding:0 4px}.page-button{height:29px;min-width:29px}.load-row{padding:12px;flex-direction:column;gap:7px}.load-row p{font-size:9px}.load-row .btn{min-height:35px}.bottom-notes{font-size:9px;align-items:flex-start;line-height:1.9;margin-bottom:18px}.bottom-notes svg{margin-top:4px}.connection-section summary{font-size:11px;padding:14px}.connection-content{padding-inline:17px;font-size:10px}.footer{font-size:8px;flex-wrap:wrap;gap:8px;padding-top:18px}.empty-state{min-height:240px}.empty-state p{font-size:11px}.toast{bottom:16px;min-width:230px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation-duration:.01ms!important;animation-iteration-count:1!important}}
+    @media print{.sidebar,.actions,.toolbar,.demo-banner,.row-action,.connection-section,.pagination,.load-row,.toast,.topbar{display:none!important}.app{display:block}.workspace{padding:0}.hero{padding:15px 0}.stats{display:grid;grid-template-columns:repeat(4,1fr)}.customers-panel{border:1px solid #ddd}.table-scroll{overflow:visible}table{display:table}tbody{display:table-row-group}thead{display:table-header-group}tbody tr{display:table-row}td{display:table-cell!important;position:static!important;padding:10px!important}th,td{font-size:10px}body{background:#fff}.stat-featured{background:#fff;color:#233c33}.stat-featured .stat-label,.stat-featured .stat-bottom{color:#53665a}}
   </style>
 </head>
 <body>
-
-  <div class="card">
-    <!-- مكان شعار المحل -->
-    <div class="logo-container">
-      <!-- تقدر تستبدل حرف الميم برابط شعارك الخاص إذا تحب -->
-      <span class="logo-placeholder">م</span>
-    </div>
-
-    <h1>مرحباً بك في مانسيك</h1>
-    <p>أنشئ اختصار التطبيق على شاشتك الرئيسية، وسجل رقمك لتبقى على اتصال دائم بأحدث العروض.</p>
-
-    <!-- إرشادات الآيفون (مثل إيرانسل) -->
-    <div class="ios-guide" id="iosGuide">
-      <b>إضافة تطبيق مانسيك لشاشتك الرئيسية:</b>
-      1. اضغط على زر المشاركة <b>Share (⎋)</b> في أسفل المتصفح.<br>
-      2. اختر خيار <b>Add to Home Screen (➕)</b>.<br>
-      3. اضغط على إضافة في الأعلى لتثبيت التطبيق.
-    </div>
-
-    <!-- بانر الأندرويد (تثبيت تلقائي) -->
-    <div class="android-banner" id="androidBanner">
-      <span>تثبيت تطبيق مانسيك على شاشتك الرئيسية لخدمة أسرع؟</span><br>
-      <button id="installBtn" type="button">تثبيت الآن</button>
-    </div>
-
-    <!-- نموذج تسجيل رقم الهاتف -->
-    <form id="regForm">
-      <input type="tel" id="phoneInput" placeholder="07700000000" required pattern="[0-9]{10,15}">
-      <button class="btn" type="submit" id="submitBtn">تأكيد المتابعة</button>
-    </form>
+  <svg class="sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <symbol id="i-brand" viewBox="0 0 32 32"><path d="M16 28V11m0 10C7 21 4 16 4 8c8 0 12 5 12 13Zm0-6C16 7 21 4 28 4c0 8-4 12-12 12Zm0 11c0-7 5-11 12-11 0 8-5 11-12 11Z"/></symbol>
+      <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.7"/><rect x="14" y="3" width="7" height="7" rx="1.7"/><rect x="3" y="14" width="7" height="7" rx="1.7"/><rect x="14" y="14" width="7" height="7" rx="1.7"/></symbol>
+      <symbol id="i-users" viewBox="0 0 24 24"><path d="M15 21v-2a5 5 0 0 0-10 0v2M18 14a4 4 0 0 1 4 4v3M16 3a4 4 0 0 1 0 8"/><circle cx="10" cy="7" r="4"/></symbol>
+      <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/></symbol>
+      <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 11-8 11S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+      <symbol id="i-store" viewBox="0 0 24 24"><path d="M3 10h18l-2-7H5l-2 7Zm0 0a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0M4 13v8h16v-8M9 21v-6h6v6M9 3v7m6-7v7"/></symbol>
+      <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 11h18m-13 5h2m4 0h2"/></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+      <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 7V3m0 4h-4M4 17v4m0-4h4M20 7a9 9 0 0 0-16 1m0 9a9 9 0 0 0 16-1"/></symbol>
+      <symbol id="i-link" viewBox="0 0 24 24"><path d="m10 14 4-4m-5 7-2 2a4 4 0 0 1-6-6l5-5a4 4 0 0 1 6 0m0 8a4 4 0 0 0 6 0l5-5a4 4 0 0 0-6-6l-2 2"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></symbol>
+      <symbol id="i-filter" viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4 2v-8L3 5Z"/></symbol>
+      <symbol id="i-shield" viewBox="0 0 24 24"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4Z"/><path d="m8 12 3 3 5-6"/></symbol>
+      <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10v.1"/></symbol>
+      <symbol id="i-right" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+      <symbol id="i-left" viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></symbol>
+      <symbol id="i-down" viewBox="0 0 24 24"><path d="m5 9 7 7 7-7"/></symbol>
+      <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></symbol>
+      <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+      <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M4 21 16 9M4 15C4 4 14 3 21 3c0 11-2 17-11 17"/></symbol>
+      <symbol id="i-alert" viewBox="0 0 24 24"><path d="m12 3 10 18H2L12 3Zm0 6v5m0 3v.1"/></symbol>
+      <symbol id="i-settings" viewBox="0 0 24 24"><path d="M4 7h16M4 17h16"/><circle cx="8" cy="7" r="3" fill="currentColor" stroke="none"/><circle cx="16" cy="17" r="3" fill="currentColor" stroke="none"/></symbol>
+    </defs>
+  </svg>
+  <a class="skip-link" href="#customers">الانتقال إلى قائمة الزبائن</a>
+  <noscript><div class="noscript">يرجى تفعيل JavaScript لعرض لوحة الزبائن. لا يتم تحميل أي بيانات عند تعطيله.</div></noscript>
+  <div class="app">
+    <aside class="sidebar" aria-label="القائمة الرئيسية">
+      <a class="brand" href="#overview" aria-label="مانسيك — الرئيسية"><span class="brandmark"><svg aria-hidden="true"><use href="#i-brand"/></svg></span><span class="brand-words"><span class="brand-name">مانسيك</span><span class="brand-sub">MANSIK</span></span></a>
+      <p class="nav-heading">مساحة العمل</p>
+      <nav class="nav" aria-label="التنقل">
+        <a class="active" href="#overview" aria-label="نظرة عامة" aria-current="location" title="نظرة عامة"><svg aria-hidden="true"><use href="#i-grid"/></svg><span class="nav-label">نظرة عامة</span></a>
+        <a href="#customers" aria-label="الزبائن" title="الزبائن"><svg aria-hidden="true"><use href="#i-users"/></svg><span class="nav-label">الزبائن</span></a>
+        <a href="#connection" id="settingsLink" aria-label="الاتصال والخصوصية" title="الاتصال والخصوصية"><svg aria-hidden="true"><use href="#i-settings"/></svg><span class="nav-label">الاتصال والخصوصية</span></a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="side-note"><svg aria-hidden="true"><use href="#i-leaf"/></svg><strong>تفاصيل صغيرة، تجربة أفضل.</strong><p>كل زيارة بداية علاقة.<br>خلّك أقرب لزبائنك.</p></div>
+        <div class="profile"><div class="profile-avatar"><svg aria-hidden="true"><use href="#i-store"/></svg></div><div><strong>لوحة المحل</strong><span id="profileMode">معاينة تجريبية</span></div></div>
+      </div>
+    </aside>
+    <main class="workspace" id="overview">
+      <header class="topbar">
+        <div class="breadcrumb"><svg aria-hidden="true"><use href="#i-store"/></svg><span>إدارة المحل</span><span>/</span><b>نظرة عامة</b></div>
+        <div class="header-meta"><span class="date-label"><svg aria-hidden="true"><use href="#i-calendar"/></svg><span id="todayLabel"></span></span><span class="pill" id="modePill" data-mode="demo"><span class="dot"></span><span id="modeLabel">وضع تجريبي</span></span></div>
+      </header>
+      <section class="hero" aria-labelledby="pageTitle">
+        <div><div class="eyebrow">مساحة مرتّبة. رؤية أوضح.</div><h1 id="pageTitle">كل زبائنك، بمكان واحد.</h1><p>تابع التسجيلات، واعثر على التفاصيل اللي تهمّك بسهولة.</p></div>
+        <div class="actions"><button class="btn" id="refreshBtn" type="button"><svg id="refreshIcon" aria-hidden="true"><use href="#i-refresh"/></svg><span>تحديث</span></button><button class="btn btn-primary" id="modeBtn" type="button"><svg aria-hidden="true"><use href="#i-link"/></svg><span id="modeBtnLabel">اتصال بـ Firebase</span></button></div>
+      </section>
+      <div class="demo-banner" id="demoBanner"><svg aria-hidden="true"><use href="#i-info"/></svg><p><strong>أهلاً بك في النسخة التجريبية.</strong> هذه بيانات توضيحية فقط، وليست بيانات زبائن حقيقية. اتصل بـ Firebase لعرض بياناتك.</p><span class="banner-tag" dir="ltr">DEMO DATA</span></div>
+      <section class="stats" aria-label="إحصاءات السجلات المحمّلة فقط">
+        <article class="stat stat-featured"><div class="stat-head"><span class="stat-label">الزبائن المحمّلون</span><span class="stat-icon"><svg aria-hidden="true"><use href="#i-users"/></svg></span></div><div class="stat-number" id="totalStat">—</div><div class="stat-bottom"><svg aria-hidden="true"><use href="#i-check"/></svg>سجلات متاحة في هذه الجلسة</div></article>
+        <article class="stat"><div class="stat-head"><span class="stat-label">تسجيلات اليوم</span><span class="stat-icon"><svg aria-hidden="true"><use href="#i-calendar"/></svg></span></div><div class="stat-number" id="todayStat">—</div><div class="stat-bottom">ضمن السجلات المحمّلة · بغداد</div></article>
+        <article class="stat"><div class="stat-head"><span class="stat-label">المحال الظاهرة</span><span class="stat-icon"><svg aria-hidden="true"><use href="#i-store"/></svg></span></div><div class="stat-number" id="shopsStat">—</div><div class="stat-bottom">معرّفات مميزة في النتائج المحمّلة</div></article>
+        <article class="stat"><div class="stat-head"><span class="stat-label">مواقع مسجّلة</span><span class="stat-icon"><svg aria-hidden="true"><use href="#i-pin"/></svg></span></div><div class="stat-number" id="locationsStat">—</div><div class="stat-bottom" id="locationNote">إحداثيات صالحة للعرض</div></article>
+      </section>
+      <section class="customers-panel" id="customers" aria-labelledby="customersTitle">
+        <div class="panel-heading"><div><div class="panel-title-row"><h2 id="customersTitle">سجل الزبائن</h2><span class="count-label" id="countLabel">— سجل</span></div><p>آخر التسجيلات أولاً · التوقيت المحلي لبغداد</p></div><div class="last-update"><svg aria-hidden="true"><use href="#i-clock"/></svg><span id="lastUpdated">لم يتم التحديث بعد</span></div></div>
+        <div class="toolbar">
+          <div class="search-wrap"><label class="sr-only" for="searchInput">ابحث برقم الهاتف أو معرّف المحل في السجلات المحمّلة</label><svg aria-hidden="true"><use href="#i-search"/></svg><input id="searchInput" type="search" placeholder="ابحث برقم الهاتف أو معرّف المحل..." autocomplete="off" spellcheck="false" maxlength="200"><button class="search-clear" type="button" id="clearSearch" aria-label="مسح البحث" hidden><svg aria-hidden="true"><use href="#i-close"/></svg></button></div>
+          <label class="select-wrap"><svg aria-hidden="true"><use href="#i-filter"/></svg><span class="sr-only">تصفية حسب المحل</span><select id="shopFilter"><option value="">جميع المحال</option></select></label>
+          <span class="scope-tag"><svg aria-hidden="true"><use href="#i-shield"/></svg>عرض للقراءة فقط</span>
+        </div>
+        <div class="filter-summary" id="filterSummary" hidden><span id="filterText"></span><button type="button" id="resetFilters">مسح التصفية</button></div>
+        <div class="error-box" id="errorBox" role="alert" hidden><svg aria-hidden="true"><use href="#i-alert"/></svg><p id="errorText"></p><button class="btn" id="retryBtn" type="button">إعادة المحاولة</button></div>
+        <div class="loading-label" id="loadingLabel" role="status" hidden><svg class="spinner" aria-hidden="true"><use href="#i-refresh"/></svg><span>جارٍ تحميل السجلات، يرجى الانتظار...</span></div>
+        <div class="table-scroll" id="tableWrap" hidden>
+          <table id="customersTable" aria-label="الزبائن المحمّلون"><caption class="sr-only">أرقام هواتف الزبائن ومعرّفات المحال ومواقع التسجيل وأوقاته. البحث والإحصاءات للسجلات المحمّلة فقط.</caption><thead><tr><th scope="col">رقم الهاتف</th><th scope="col">معرّف المحل</th><th scope="col">الموقع الجغرافي</th><th scope="col">وقت التسجيل</th><th scope="col"><span class="sr-only">نسخ الهاتف</span></th></tr></thead><tbody id="customersList"></tbody></table>
+        </div>
+        <div class="empty-state" id="emptyState" hidden><div class="empty-icon"><svg id="emptyIcon" aria-hidden="true"><use href="#i-users"/></svg></div><h3 id="emptyTitle"></h3><p id="emptyDescription"></p><button class="btn" id="emptyReset" type="button" hidden>عرض جميع الزبائن</button></div>
+        <div class="table-footer" id="tableFooter" hidden><div class="results-info" id="resultsInfo"></div><nav class="pagination" aria-label="صفحات النتائج المحمّلة"><button class="page-button" id="prevPage" type="button" aria-label="الصفحة السابقة"><svg aria-hidden="true"><use href="#i-right"/></svg></button><span class="page-button page-current" id="pageCurrent" aria-current="page">1</span><span class="page-total" id="pageTotal"></span><button class="page-button" id="nextPage" type="button" aria-label="الصفحة التالية"><svg aria-hidden="true"><use href="#i-left"/></svg></button></nav></div>
+        <div class="load-row" id="loadRow" hidden><p id="loadHint">البحث والإحصاءات يشملان السجلات المحمّلة فقط.</p><button class="btn" id="loadMoreBtn" type="button"><svg aria-hidden="true"><use href="#i-down"/></svg><span>تحميل 50 سجلاً إضافياً</span></button></div>
+      </section>
+      <div class="bottom-notes"><svg aria-hidden="true"><use href="#i-info"/></svg><span>المواقع هي إحداثيات التسجيل، وليست تتبّعاً مباشراً. لا تعرض هذه اللوحة بيانات لم يتم تحميلها بعد.</span></div>
+      <details class="connection-section" id="connection"><summary><svg aria-hidden="true"><use href="#i-shield"/></svg><span>عن الاتصال والخصوصية</span><svg class="chevron" aria-hidden="true"><use href="#i-down"/></svg></summary><div class="connection-content"><p>المشروع: <code>mansik-3a5f7</code> · المجموعة: <code>customers</code>. تُقرأ السجلات على دفعات من 50، مرتّبة تنازلياً حسب <code>timestamp</code>. لا تتضمن النتائج مستندات تفتقد هذا الحقل.</p><ul><li>يبدأ العرض ببيانات اصطناعية. زر «اتصال بـ Firebase» وحده يفعّل القراءة الحقيقية. العودة للتجربة تمسح البيانات الحقيقية من العرض.</li><li>لا توجد عمليات إضافة أو تعديل أو حذف، ولا يتم حفظ بيانات الزبائن في التخزين المحلي. تُقرأ البيانات من الخادم عند الطلب، ولا تُعرض نسخة مخبأة باعتبارها تحديثاً جديداً.</li><li>قد تتغير البيانات بين دفعات القراءة؛ الإحصاءات ليست إجمالي قاعدة البيانات. استخدم «تحديث» لبدء قراءة جديدة. كل قراءة قد تحتسب ضمن استهلاك Firebase.</li><li>روابط الخرائط تُفتح فقط عند النقر عليها، وترسل الإحداثيات المعروضة إلى Google Maps.</li></ul><p class="security-note"><strong>قبل الاستخدام الفعلي:</strong> هذه الواجهة لا تتضمن تسجيل دخول. يجب دمج Firebase Authentication وقواعد Firestore التي تمنح كل مستخدم صلاحية قراءة المحال المسموح بها فقط. لا تفتح قاعدة البيانات للعامة لحل خطأ الصلاحيات؛ البحث والتصفية في الواجهة ليسا حماية للبيانات.</p><p>يتطلب الاتصال بالبيانات الإنترنت وإتاحة مكتبات Firebase. عند تضمين اللوحة في تطبيق محمي، يجب ضبط الاستعلام ليتوافق مع قواعد صلاحيات المستخدم. <a href="https://firebase.google.com/docs/firestore/security/get-started" target="_blank" rel="noopener noreferrer">دليل قواعد Firestore <span aria-hidden="true">↗</span></a></p></div></details>
+      <footer class="footer"><span>مانسيك — علاقات أقرب، إدارة أبسط.</span><span id="footerMode">عرض تجريبي · لا يتصل بقاعدة البيانات</span><span class="footer-brand" dir="ltr">MANSIK / DASHBOARD</span></footer>
+    </main>
   </div>
-
+  <div class="sr-only" id="announcer" role="status" aria-live="polite" aria-atomic="true"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
-
+    // Web client configuration is not authorization. Enforce access in Firestore rules.
     const firebaseConfig = {
       apiKey: "AIzaSyD3BNdw99hee_Nck-R7e3zNFYlkEMCsR3Y",
       authDomain: "mansik-3a5f7.firebaseapp.com",
       projectId: "mansik-3a5f7",
       storageBucket: "mansik-3a5f7.firebasestorage.app",
       messagingSenderId: "979503666389",
-      appId: "1:979503666389:web:428f2b14de3a89a2a9be5c"
+      appId: "1:979503666389:web:428f2b14de3a89a2a9be5c",
+      measurementId: "G-GV774TQEGQ"
     };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    const iosGuide = document.getElementById("iosGuide");
-    const androidBanner = document.getElementById("androidBanner");
-
-    if (isIOS) {
-      iosGuide.style.display = "block";
+    const SDK_VERSION = "12.19.0";
+    const BATCH_SIZE = 50;
+    const PAGE_SIZE = 8;
+    const TIME_ZONE = "Asia/Baghdad";
+    const $ = (id) => document.getElementById(id);
+    const state = {mode:"demo", rows:[], cursor:null, hasMore:false, loading:false, page:1, search:"", shop:"", error:null, generation:0, lastUpdated:null};
+    let sdkPromise = null;
+    let toastTimer;
+    const dateFormat = new Intl.DateTimeFormat("ar-IQ", {timeZone:TIME_ZONE, day:"numeric", month:"short", year:"numeric"});
+    const timeFormat = new Intl.DateTimeFormat("ar-IQ", {timeZone:TIME_ZONE, hour:"numeric", minute:"2-digit"});
+    const dayFormat = new Intl.DateTimeFormat("en-CA", {timeZone:TIME_ZONE, year:"numeric", month:"2-digit", day:"2-digit"});
+    const displayNumber = new Intl.NumberFormat("en-US");
+    const icon = (name, className = "") => {
+      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("aria-hidden", "true");
+      if (className) svg.setAttribute("class", className);
+      const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
+      use.setAttribute("href", "#i-" + name);
+      svg.append(use);
+      return svg;
+    };
+    function element(tag, className, text) {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (text !== undefined) node.textContent = text;
+      return node;
     }
-
-    let deferredPrompt;
-    const installBtn = document.getElementById("installBtn");
-
-    window.addEventListener("beforeinstallprompt", (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      if (!isIOS) {
-        androidBanner.style.display = "block";
-      }
-    });
-
-    installBtn.addEventListener("click", async () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === "accepted") {
-          androidBanner.style.display = "none";
-        }
-        deferredPrompt = null;
-      }
-    });
-
-    const form = document.getElementById("regForm");
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const phone = document.getElementById("phoneInput").value.trim();
-      const submitBtn = document.getElementById("submitBtn");
-
-      if (!phone) return;
-
-      submitBtn.disabled = true;
-      submitBtn.textContent = "جارٍ الحفظ...";
-
+    function safeText(value, fallback) {
+      if (typeof value === "string") return value.trim() || fallback;
+      if (typeof value === "number" && Number.isFinite(value)) return String(value);
+      return fallback;
+    }
+    function coordinate(value, max) {
+      if (typeof value !== "number" && typeof value !== "string") return null;
+      if (typeof value === "string" && !/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(value.trim())) return null;
+      const number = Number(value);
+      return Number.isFinite(number) && Math.abs(number) <= max ? number : null;
+    }
+    function validDate(value) {
       try {
-        await addDoc(collection(db, "customers"), {
-          phone: phone,
-          shopId: "MNS-101",
-          latitude: 33.31,
-          longitude: 44.36,
-          timestamp: serverTimestamp()
-        });
-        alert("تم تسجيل رقمك بنجاح وشكراً لك!");
-        form.reset();
-      } catch (error) {
-        alert("حدث خطأ في التسجيل، يرجى المحاولة مرة أخرى.");
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = "تأكيد المتابعة";
+        let date = null;
+        if (value instanceof Date) date = value;
+        else if (value && typeof value.toDate === "function") date = value.toDate();
+        else if (typeof value === "string" && /^\d{4}-\d{2}-\d{2}T/.test(value)) date = new Date(value);
+        else if (typeof value === "number" && Number.isFinite(value)) date = new Date(value);
+        return date instanceof Date && Number.isFinite(date.getTime()) ? date : null;
+      } catch { return null; }
+    }
+    function normalizeRecord(doc) {
+      const data = doc.data() || {};
+      const lat = coordinate(data.latitude, 90);
+      const lng = coordinate(data.longitude, 180);
+      const rawPhone = safeText(data.phone, "");
+      const rawShop = safeText(data.shopId, "");
+      return {id:doc.id, phone:rawPhone || "غير متوفر", copyPhone:rawPhone, shop:rawShop || "عام", shopKey:rawShop ? "id:" + rawShop : "missing:", hasShop:Boolean(rawShop), latitude:lat, longitude:lng, hasLocation:lat !== null && lng !== null, date:validDate(data.timestamp)};
+    }
+    function normalizeSearch(value) {
+      return value.normalize("NFKC").replace(/[\u0660-\u0669]/g, c => String(c.charCodeAt(0) - 0x0660)).replace(/[\u06f0-\u06f9]/g, c => String(c.charCodeAt(0) - 0x06f0)).toLowerCase().replace(/[\s\-()+]/g, "");
+    }
+    const demoCreatedAt = Date.now();
+    const demoDocs = Array.from({length:68}, (_, index) => ({
+      id:"demo-" + String(index + 1).padStart(4, "0"),
+      data:() => ({
+        phone:"07XX XXX " + String(1001 + index),
+        shopId:["MNS-101", "MNS-102", "MNS-103", "MNS-101", "MNS-104"][index % 5],
+        latitude:index % 5 === 3 ? null : +(33.31 + (index % 17) * .0017).toFixed(5),
+        longitude:index % 5 === 3 ? null : +(44.36 + (index % 13) * .0021).toFixed(5),
+        timestamp:new Date(demoCreatedAt - index * 53 * 60 * 1000)
+      })
+    }));
+    function notify(message) {
+      clearTimeout(toastTimer);
+      $("toast").textContent = message;
+      $("toast").hidden = false;
+      toastTimer = setTimeout(() => { $("toast").hidden = true; }, 3200);
+    }
+    function announce(message) { $("announcer").textContent = message; }
+    async function copyPhone(value) {
+      if (!value) return;
+      try {
+        if (navigator.clipboard && window.isSecureContext) await navigator.clipboard.writeText(value);
+        else {
+          const field = element("textarea", "sr-only");
+          field.value = value;
+          document.body.append(field);
+          const focused = document.activeElement;
+          field.focus();
+          field.select();
+          let copied;
+          try { copied = document.execCommand("copy"); }
+          finally { field.remove(); focused?.focus(); }
+          if (!copied) throw new Error("clipboard-unavailable");
+        }
+        notify("تم نسخ رقم الهاتف.");
+      } catch { notify("تعذّر النسخ التلقائي. يمكنك تحديد الرقم ونسخه يدوياً."); }
+    }
+    function renderRow(record, index) {
+      const tr = document.createElement("tr");
+      const phoneCell = document.createElement("td");
+      const customer = element("div", "customer-cell");
+      const avatar = element("span", "customer-avatar tone-" + (index % 4));
+      avatar.append(icon("user"));
+      const info = element("div", "customer-info");
+      const phone = element("bdi", "phone", record.phone);
+      phone.dir = "ltr";
+      info.append(phone, element("span", "row-caption", state.mode === "demo" ? "زبون تجريبي" : "سجل زبون"));
+      customer.append(avatar, info);
+      phoneCell.append(customer);
+      const shopCell = document.createElement("td");
+      shopCell.append(element("bdi", "shop-badge", record.shop));
+      const locationCell = document.createElement("td");
+      if (record.hasLocation) {
+        const link = element("a", "map-link");
+        const url = new URL("https://www.google.com/maps");
+        url.searchParams.set("q", record.latitude + "," + record.longitude);
+        link.href = url.href;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.referrerPolicy = "no-referrer";
+        link.title = record.latitude.toFixed(5) + ", " + record.longitude.toFixed(5);
+        link.setAttribute("aria-label", "عرض موقع تسجيل " + record.phone + " في خريطة خارجية (نافذة جديدة)");
+        link.append(icon("pin"), document.createTextNode("عرض الخريطة"));
+        locationCell.append(link);
+      } else {
+        const missing = element("span", "no-location");
+        missing.append(icon("pin"), document.createTextNode("غير مسجّل"));
+        locationCell.append(missing);
       }
+      const timeCell = document.createElement("td");
+      if (record.date) {
+        const date = element("time", "time-date", dateFormat.format(record.date));
+        date.dateTime = record.date.toISOString();
+        timeCell.append(date, element("span", "time-clock", timeFormat.format(record.date)));
+      } else timeCell.append(element("span", "no-location", "وقت غير محدد"));
+      const actionCell = document.createElement("td");
+      const copy = element("button", "row-action");
+      copy.type = "button";
+      copy.title = "نسخ رقم الهاتف";
+      copy.setAttribute("aria-label", "نسخ رقم الهاتف " + record.phone);
+      copy.disabled = !record.copyPhone;
+      copy.append(icon("copy"));
+      copy.addEventListener("click", () => copyPhone(record.copyPhone));
+      actionCell.append(copy);
+      tr.append(phoneCell, shopCell, locationCell, timeCell, actionCell);
+      return tr;
+    }
+    function filteredRecords() {
+      const term = normalizeSearch(state.search);
+      return state.rows.filter(record => (!state.shop || record.shopKey === state.shop) && (!term || normalizeSearch(record.phone).includes(term) || normalizeSearch(record.shop).includes(term)));
+    }
+    function renderStats() {
+      const rows = state.rows;
+      const today = dayFormat.format(new Date());
+      const todayCount = rows.filter(record => record.date && dayFormat.format(record.date) === today).length;
+      const locations = rows.filter(record => record.hasLocation).length;
+      const countAvailable = state.lastUpdated !== null;
+      $("totalStat").textContent = countAvailable ? displayNumber.format(rows.length) : "—";
+      $("todayStat").textContent = countAvailable ? displayNumber.format(todayCount) : "—";
+      $("shopsStat").textContent = countAvailable ? displayNumber.format(new Set(rows.filter(record => record.hasShop).map(record => record.shopKey)).size) : "—";
+      $("locationsStat").textContent = countAvailable ? displayNumber.format(locations) : "—";
+      $("locationNote").textContent = rows.length ? Math.round(locations / rows.length * 100) + "% من السجلات المحمّلة" : "إحداثيات صالحة للعرض";
+      $("countLabel").textContent = countAvailable ? rows.length + " سجل محمّل" : "لم تُحمّل البيانات";
+      $("lastUpdated").textContent = state.lastUpdated ? "آخر تحديث " + timeFormat.format(state.lastUpdated) : "لم يتم التحديث بعد";
+    }
+    function renderShopOptions() {
+      const shops = new Map(state.rows.map(record => [record.shopKey, record.hasShop ? record.shop : "عام (بدون معرّف)"]));
+      const fragment = document.createDocumentFragment();
+      fragment.append(new Option("جميع المحال", ""));
+      [...shops].sort((a, b) => a[1].localeCompare(b[1], "ar")).forEach(([value, label]) => fragment.append(new Option(label, value)));
+      if (state.shop && !shops.has(state.shop)) state.shop = "";
+      $("shopFilter").replaceChildren(fragment);
+      $("shopFilter").value = state.shop;
+    }
+    function render() {
+      const live = state.mode === "live";
+      $("modePill").dataset.mode = state.mode;
+      $("modeLabel").textContent = live ? (state.loading ? "جارٍ الاتصال" : state.error ? "تعذّر التحديث" : "بيانات Firebase") : "وضع تجريبي";
+      $("modeBtnLabel").textContent = live ? "العودة للتجربة" : "اتصال بـ Firebase";
+      $("modeBtn").setAttribute("aria-label", live ? "العودة للبيانات التجريبية وإخفاء البيانات الحقيقية" : "الاتصال بمشروع Firebase وقراءة بيانات الزبائن الحقيقية");
+      $("profileMode").textContent = live ? "مصدر البيانات: Firebase" : "معاينة تجريبية";
+      $("footerMode").textContent = live ? "وضع البيانات الحقيقية · قراءة فقط" : "عرض تجريبي · لا يتصل بقاعدة البيانات";
+      $("demoBanner").hidden = live;
+      $("refreshBtn").disabled = state.loading;
+      $("retryBtn").disabled = state.loading;
+      $("refreshIcon").classList.toggle("spinner", state.loading);
+      $("loadingLabel").hidden = !state.loading;
+      $("customersTable").setAttribute("aria-busy", String(state.loading));
+      $("errorBox").hidden = !state.error;
+      $("errorText").textContent = state.error ? state.error.message : "";
+      $("clearSearch").hidden = !state.search;
+      renderStats();
+      const filtered = filteredRecords();
+      const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+      state.page = Math.max(1, Math.min(state.page, pageCount));
+      const start = (state.page - 1) * PAGE_SIZE;
+      const visible = filtered.slice(start, start + PAGE_SIZE);
+      const fragment = document.createDocumentFragment();
+      visible.forEach((record, index) => fragment.append(renderRow(record, start + index)));
+      $("customersList").replaceChildren(fragment);
+      $("tableWrap").hidden = !visible.length;
+      $("tableFooter").hidden = !visible.length;
+      const filteredActive = Boolean(state.search || state.shop);
+      $("filterSummary").hidden = !filteredActive;
+      $("filterText").textContent = filtered.length + " نتيجة مطابقة من " + state.rows.length + " سجل محمّل";
+      $("resultsInfo").textContent = "عرض " + (start + 1) + "–" + Math.min(start + PAGE_SIZE, filtered.length) + " من " + filtered.length + (filteredActive ? " نتيجة مطابقة" : " سجل محمّل");
+      $("pageCurrent").textContent = String(state.page);
+      $("pageTotal").textContent = "من " + pageCount;
+      $("prevPage").disabled = state.page <= 1;
+      $("nextPage").disabled = state.page >= pageCount;
+      $("loadRow").hidden = !state.lastUpdated;
+      $("loadMoreBtn").hidden = !state.hasMore;
+      $("loadMoreBtn").disabled = state.loading || Boolean(state.error);
+      $("loadHint").textContent = state.hasMore ? "البحث والإحصاءات يشملان السجلات المحمّلة فقط؛ حمّل المزيد لتوسيع النتائج." : "تم تحميل جميع السجلات المتاحة لهذا الاستعلام. البحث داخل هذه النتائج فقط.";
+      const showEmpty = !visible.length && !state.loading;
+      $("emptyState").hidden = !showEmpty;
+      if (showEmpty) {
+        if (state.error && !state.rows.length) {
+          $("emptyTitle").textContent = "لم نتمكّن من عرض البيانات";
+          $("emptyDescription").textContent = "تحقّق من الرسالة أعلاه وأعد المحاولة. لن تُستبدل البيانات الحقيقية ببيانات تجريبية تلقائياً.";
+        } else if (filteredActive && state.rows.length) {
+          $("emptyTitle").textContent = "ما لقينا نتيجة مطابقة";
+          $("emptyDescription").textContent = "جرّب رقماً أو معرّفاً مختلفاً، أو امسح التصفية. البحث يقتصر على البيانات المحمّلة.";
+        } else {
+          $("emptyTitle").textContent = "لا توجد تسجيلات حتى الآن";
+          $("emptyDescription").textContent = "ستظهر التسجيلات هنا بعد توفرها في الاستعلام. المستندات التي لا تحتوي على timestamp لا تظهر ضمنه.";
+        }
+        $("emptyReset").hidden = !filteredActive;
+      }
+    }
+    function withTimeout(promise, milliseconds = 18000) {
+      let timer;
+      return Promise.race([promise, new Promise((_, reject) => { timer = setTimeout(() => { const error = new Error("request-timeout"); error.code = "deadline-exceeded"; reject(error); }, milliseconds); })]).finally(() => clearTimeout(timer));
+    }
+    async function firebaseServices() {
+      if (!sdkPromise) {
+        sdkPromise = (async () => {
+          let modules;
+          try {
+            modules = await Promise.all([
+              import("https://www.gstatic.com/firebasejs/" + SDK_VERSION + "/firebase-app.js"),
+              import("https://www.gstatic.com/firebasejs/" + SDK_VERSION + "/firebase-firestore.js")
+            ]);
+          } catch (cause) {
+            const error = new Error("sdk-load-failed", {cause});
+            error.code = "sdk-load-failed";
+            throw error;
+          }
+          const [appSdk, firestore] = modules;
+          const app = appSdk.getApps().find(item => item.name === "mansik-dashboard") || appSdk.initializeApp(firebaseConfig, "mansik-dashboard");
+          return {firestore, db:firestore.getFirestore(app)};
+        })().catch(error => { sdkPromise = null; throw error; });
+      }
+      return sdkPromise;
+    }
+    function errorMessage(error) {
+      const code = typeof error?.code === "string" ? error.code.replace(/^firestore\//, "") : "unknown";
+      if (code === "permission-denied" || code === "unauthenticated") return "لا توجد صلاحية لقراءة الزبائن. هذه النسخة لا تتضمن تسجيل دخول؛ يجب دمج تسجيل الدخول وقواعد وصول مناسبة. لا تجعل قاعدة البيانات عامة.";
+      if (code === "failed-precondition") return "تعذّر تنفيذ الاستعلام. راجع إعداد Firestore والفهارس اللازمة لترتيب السجلات حسب timestamp في مشروعك.";
+      if (code === "sdk-load-failed") return "تعذّر تحميل مكتبات Firebase. تحقّق من الإنترنت والسماح بالوصول إلى gstatic.com. إذا استمر الخطأ بعد إعادة المحاولة، أعد تحميل الصفحة.";
+      if (code === "unavailable" || code === "deadline-exceeded" || (typeof navigator !== "undefined" && !navigator.onLine)) return "تعذّر الوصول إلى الخادم أو انتهت مهلة الانتظار. تحقّق من الإنترنت ثم أعد المحاولة؛ لا نعرض بيانات مخبأة كتحديث جديد.";
+      if (code === "resource-exhausted") return "تم بلوغ حد الاستخدام المتاح في Firebase. راجع حصة القراءة أو حاول لاحقاً.";
+      return "حدث خطأ أثناء قراءة البيانات. تحقّق من إعدادات Firebase وصلاحيات المشروع، ثم أعد المحاولة.";
+    }
+    async function loadRecords({append = false} = {}) {
+      if (state.loading) return;
+      if (append && !state.hasMore) return;
+      const generation = ++state.generation;
+      const mode = state.mode;
+      const cursor = state.cursor;
+      const demoOffset = append ? state.rows.length : 0;
+      state.loading = true;
+      state.error = null;
+      render();
+      announce(append ? "جارٍ تحميل المزيد من السجلات." : "جارٍ تحديث السجلات.");
+      try {
+        let records;
+        let nextCursor;
+        let hasMore;
+        if (mode === "demo") {
+          const docs = demoDocs.slice(demoOffset, demoOffset + BATCH_SIZE);
+          records = docs.map(normalizeRecord);
+          hasMore = demoOffset + docs.length < demoDocs.length;
+          nextCursor = null;
+        } else {
+          const {firestore:f, db} = await withTimeout(firebaseServices());
+          if (generation !== state.generation || mode !== state.mode) return;
+          const constraints = [f.orderBy("timestamp", "desc")];
+          if (append && cursor) constraints.push(f.startAfter(cursor));
+          constraints.push(f.limit(BATCH_SIZE));
+          // Read from the server explicitly; do not label an offline cache as fresh data.
+          const snapshot = await withTimeout(f.getDocsFromServer(f.query(f.collection(db, "customers"), ...constraints)));
+          if (generation !== state.generation || mode !== state.mode) return;
+          records = snapshot.docs.map(normalizeRecord);
+          nextCursor = snapshot.docs[snapshot.docs.length - 1] || cursor;
+          hasMore = snapshot.size === BATCH_SIZE;
+        }
+        if (generation !== state.generation || mode !== state.mode) return;
+        if (append) {
+          const merged = new Map(state.rows.map(record => [record.id, record]));
+          records.forEach(record => merged.set(record.id, record));
+          state.rows = [...merged.values()];
+        } else {
+          state.rows = records;
+          state.page = 1;
+        }
+        state.cursor = nextCursor;
+        state.hasMore = hasMore;
+        state.lastUpdated = new Date();
+        renderShopOptions();
+        announce("تم تحميل " + state.rows.length + " سجلاً" + (mode === "demo" ? " تجريبياً." : "."));
+      } catch (error) {
+        if (generation !== state.generation || mode !== state.mode) return;
+        state.error = {message:errorMessage(error), append};
+        // Do not log customer records, SDK exceptions, or credentials.
+        announce("تعذّر تحميل البيانات. راجع رسالة الخطأ وأعد المحاولة.");
+      } finally {
+        if (generation === state.generation && mode === state.mode) {
+          state.loading = false;
+          render();
+        }
+      }
+    }
+    function switchMode() {
+      ++state.generation;
+      state.mode = state.mode === "demo" ? "live" : "demo";
+      state.rows = [];
+      state.cursor = null;
+      state.page = 1;
+      state.hasMore = false;
+      state.loading = false;
+      state.error = null;
+      state.lastUpdated = null;
+      state.shop = "";
+      state.search = "";
+      $("searchInput").value = "";
+      renderShopOptions();
+      render();
+      loadRecords();
+    }
+    function resetFilters() {
+      state.search = "";
+      state.shop = "";
+      state.page = 1;
+      $("searchInput").value = "";
+      $("shopFilter").value = "";
+      render();
+      $("searchInput").focus();
+      announce("تم مسح البحث والتصفية.");
+    }
+    $("todayLabel").textContent = new Intl.DateTimeFormat("ar-IQ", {timeZone:TIME_ZONE, weekday:"long", day:"numeric", month:"long"}).format(new Date());
+    $("refreshBtn").addEventListener("click", () => loadRecords());
+    $("modeBtn").addEventListener("click", switchMode);
+    $("loadMoreBtn").addEventListener("click", () => loadRecords({append:true}));
+    $("retryBtn").addEventListener("click", () => loadRecords({append:Boolean(state.error?.append)}));
+    $("searchInput").addEventListener("input", event => {
+      state.search = event.target.value;
+      state.page = 1;
+      render();
+      announce(filteredRecords().length + " نتيجة في السجلات المحمّلة.");
     });
+    $("clearSearch").addEventListener("click", () => {
+      state.search = "";
+      state.page = 1;
+      $("searchInput").value = "";
+      render();
+      $("searchInput").focus();
+    });
+    $("shopFilter").addEventListener("change", event => { state.shop = event.target.value; state.page = 1; render(); announce(filteredRecords().length + " نتيجة مطابقة."); });
+    $("resetFilters").addEventListener("click", resetFilters);
+    $("emptyReset").addEventListener("click", resetFilters);
+    $("prevPage").addEventListener("click", () => { state.page--; render(); announce("الصفحة " + state.page); });
+    $("nextPage").addEventListener("click", () => { state.page++; render(); announce("الصفحة " + state.page); });
+    $("settingsLink").addEventListener("click", () => { $("connection").open = true; });
+    document.querySelectorAll(".nav a").forEach(link => link.addEventListener("click", () => {
+      document.querySelectorAll(".nav a").forEach(item => { item.classList.remove("active"); item.removeAttribute("aria-current"); });
+      link.classList.add("active");
+      link.setAttribute("aria-current", "location");
+    }));
+    loadRecords();
   </script>
 </body>
 </html>
