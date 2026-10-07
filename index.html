@@ -1,100 +1,143 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مانسيك - تسجيل الولاء</title>
-    <style>
-        body { font-family: Tahoma, sans-serif; background-color: #f4f7f6; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
-        h2 { color: #333; margin-bottom: 10px; }
-        p { color: #666; font-size: 14px; margin-bottom: 20px; }
-        input { width: 100%; padding: 12px; font-size: 16px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; margin-bottom: 15px; text-align: center; }
-        button { background-color: #4CAF50; color: white; border: none; padding: 12px; width: 100%; font-size: 16px; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        button:hover { background-color: #45a049; }
-        #message { margin-top: 15px; font-size: 14px; font-weight: bold; }
-        #shopNameDisplay { color: #2196F3; font-weight: bold; margin-bottom: 15px; display: block; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#174c3c">
+  <title>مانسيك | تسجيل الزبائن</title>
+  <style>
+    :root{--bg:#f5f6f3;--surface:#fff;--ink:#233c33;--green:#205b47;--green-dark:#153f31;--border:#e6eae4;--radius:18px}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,sans-serif;display:grid;place-items:center;min-height:100vh;padding:20px}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:25px;max-width:400px;width:100%;box-shadow:0 5px 20px rgba(0,0,0,0.05);text-align:center}
+    
+    /* تصميم شعار المحل */
+    .logo-container{width:70px;height:70px;margin:0 auto 15px;border-radius:16px;background:#f0f4eb;border:1px solid #d9e4d0;display:grid;place-items:center;overflow:hidden}
+    .logo-container img{width:100%;height:100%;object-fit:cover}
+    .logo-placeholder{font-size:24px;font-weight:bold;color:var(--green)}
+
+    h1{font-size:20px;margin:0 0 8px}
+    p{color:#7a867f;font-size:12px;margin:0 0 15px;line-height:1.6}
+    input{width:100%;height:45px;padding:10px 15px;border:1px solid var(--border);border-radius:10px;font-size:14px;text-align:center;direction:ltr;margin-bottom:12px;outline:none}
+    input:focus{border-color:var(--green)}
+    .btn{width:100%;height:45px;background:var(--green);color:#fff;border:0;border-radius:10px;font-size:14px;font-weight:bold;cursor:pointer;transition:background .2s}
+    .btn:hover{background:var(--green-dark)}
+    
+    /* ستايل بانر الأندرويد */
+    .android-banner{background:#edf4ed;border:1px solid #cce0cc;border-radius:10px;padding:12px;margin-bottom:15px;font-size:12px;color:var(--green);display:none}
+    .android-banner button{background:var(--green);color:#fff;border:0;padding:6px 14px;border-radius:6px;margin-top:8px;cursor:pointer;font-weight:bold}
+
+    /* ستايل إرشادات الآيفون */
+    .ios-guide{background:#faf4e8;border:1px solid #eee4d1;border-radius:10px;padding:15px;margin-bottom:15px;font-size:11px;color:#79603b;text-align:right;display:none;line-height:1.8}
+    .ios-guide b{color:#534024;display:block;margin-bottom:5px;font-size:12px}
+  </style>
 </head>
 <body>
 
-    <div class="card">
-        <h2>أهلاً بك في مانسيك</h2>
-        <span id="shopNameDisplay">جاري تحديد المحل...</span>
-        <p>أدخل رقم هاتفك لتسجيل نقاط الولاء والحصول على العرض</p>
-        
-        <form id="loyaltyForm">
-            <input type="tel" id="phone" placeholder="07xxxxxxxx" required pattern="[0-9]{10,11}">
-            <button type="submit">تسجيل رقمي</button>
-        </form>
-        
-        <div id="message"></div>
+  <div class="card">
+    <!-- مكان شعار المحل -->
+    <div class="logo-container">
+      <!-- تقدر تستبدل حرف الميم برابط شعارك الخاص إذا تحب -->
+      <span class="logo-placeholder">م</span>
     </div>
 
-    <!-- Firebase Scripts -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+    <h1>مرحباً بك في مانسيك</h1>
+    <p>أنشئ اختصار التطبيق على شاشتك الرئيسية، وسجل رقمك لتبقى على اتصال دائم بأحدث العروض.</p>
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyD3BNdw99hee_Nck-R7e3zNFYlkEMCsR3Y",
-            authDomain: "mansik-3a5f7.firebaseapp.com",
-            projectId: "mansik-3a5f7",
-            storageBucket: "mansik-3a5f7.firebasestorage.app",
-            messagingSenderId: "979503666389",
-            appId: "1:979503666389:web:428f2b14de3a89a2a9be5c",
-            measurementId: "G-GV774TQEGQ"
-        };
+    <!-- إرشادات الآيفون (مثل إيرانسل) -->
+    <div class="ios-guide" id="iosGuide">
+      <b>إضافة تطبيق مانسيك لشاشتك الرئيسية:</b>
+      1. اضغط على زر المشاركة <b>Share (⎋)</b> في أسفل المتصفح.<br>
+      2. اختر خيار <b>Add to Home Screen (➕)</b>.<br>
+      3. اضغط على إضافة في الأعلى لتثبيت التطبيق.
+    </div>
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+    <!-- بانر الأندرويد (تثبيت تلقائي) -->
+    <div class="android-banner" id="androidBanner">
+      <span>تثبيت تطبيق مانسيك على شاشتك الرئيسية لخدمة أسرع؟</span><br>
+      <button id="installBtn" type="button">تثبيت الآن</button>
+    </div>
 
-        // التقاط معرف المحل من رابط الصفحة (مثال: ?shop=baghdad_cafe)
-        const urlParams = new URLSearchParams(window.location.search);
-        const shopId = urlParams.get('shop') || 'default_shop';
-        document.getElementById('shopNameDisplay').textContent = `أنت تسجل في فرع / محل: ${shopId}`;
+    <!-- نموذج تسجيل رقم الهاتف -->
+    <form id="regForm">
+      <input type="tel" id="phoneInput" placeholder="07700000000" required pattern="[0-9]{10,15}">
+      <button class="btn" type="submit" id="submitBtn">تأكيد المتابعة</button>
+    </form>
+  </div>
 
-        const form = document.getElementById('loyaltyForm');
-        const messageDiv = document.getElementById('message');
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const phone = document.getElementById('phone').value;
-            messageDiv.style.color = "#000";
-            messageDiv.textContent = "جاري حفظ بياناتك وتحديد موقعك...";
+    const firebaseConfig = {
+      apiKey: "AIzaSyD3BNdw99hee_Nck-R7e3zNFYlkEMCsR3Y",
+      authDomain: "mansik-3a5f7.firebaseapp.com",
+      projectId: "mansik-3a5f7",
+      storageBucket: "mansik-3a5f7.firebasestorage.app",
+      messagingSenderId: "979503666389",
+      appId: "1:979503666389:web:428f2b14de3a89a2a9be5c"
+    };
 
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(async (position) => {
-                    const latitude = position.coords.latitude;
-                    const longitude = position.coords.longitude;
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-                    try {
-                        // حفظ البيانات مع معرف المحل والإحداثيات
-                        await addDoc(collection(db, "customers"), {
-                            shopId: shopId,
-                            phone: phone,
-                            latitude: latitude,
-                            longitude: longitude,
-                            timestamp: serverTimestamp()
-                        });
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const iosGuide = document.getElementById("iosGuide");
+    const androidBanner = document.getElementById("androidBanner");
 
-                        messageDiv.style.color = "green";
-                        messageDiv.textContent = "تم التسجيل بنجاح! شكراً لك.";
-                        form.reset();
-                    } catch (error) {
-                        console.error("Error adding document: ", error);
-                        messageDiv.style.color = "red";
-                        messageDiv.textContent = "حدث خطأ أثناء الحفظ، حاول مرة أخرى.";
-                    }
-                }, (error) => {
-                    messageDiv.style.color = "red";
-                    messageDiv.textContent = "يرجى السماح بالوصول للموقع الجغرافي (GPS) لإتمام التسجيل!";
-                });
-            } else {
-                messageDiv.style.color = "red";
-                messageDiv.textContent = "متصفحك لا يدعم تحديد الموقع الجغرافي.";
-            }
+    if (isIOS) {
+      iosGuide.style.display = "block";
+    }
+
+    let deferredPrompt;
+    const installBtn = document.getElementById("installBtn");
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      if (!isIOS) {
+        androidBanner.style.display = "block";
+      }
+    });
+
+    installBtn.addEventListener("click", async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === "accepted") {
+          androidBanner.style.display = "none";
+        }
+        deferredPrompt = null;
+      }
+    });
+
+    const form = document.getElementById("regForm");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const phone = document.getElementById("phoneInput").value.trim();
+      const submitBtn = document.getElementById("submitBtn");
+
+      if (!phone) return;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "جارٍ الحفظ...";
+
+      try {
+        await addDoc(collection(db, "customers"), {
+          phone: phone,
+          shopId: "MNS-101",
+          latitude: 33.31,
+          longitude: 44.36,
+          timestamp: serverTimestamp()
         });
-    </script>
+        alert("تم تسجيل رقمك بنجاح وشكراً لك!");
+        form.reset();
+      } catch (error) {
+        alert("حدث خطأ في التسجيل، يرجى المحاولة مرة أخرى.");
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "تأكيد المتابعة";
+      }
+    });
+  </script>
 </body>
 </html>
