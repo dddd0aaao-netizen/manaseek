@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مانسيك - لوحة تحكم صاحب المحل</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #333; }
+        .login-box { display: flex; gap: 10px; margin-bottom: 20px; }
+        input { flex: 1; padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 6px; }
+        button { background-color: #2196F3; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        button:hover { background-color: #0b7dda; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: center; font-size: 14px; }
+        th { background-color: #f2f2f2; color: #333; }
+        #statusMsg { text-align: center; font-weight: bold; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>لوحة تحكم صاحب المحل</h2>
+        <p style="text-align: center; color: #666; font-size: 13px;">اكتب رمز المحل الخاص بك لعرض قائمة الزبائن المسجلين لديك</p>
+        
+        <div class="login-box">
+            <input type="text" id="shopCodeInput" placeholder="أدخل رمز المحل (مثال: baghdad_cafe)">
+            <button id="loadBtn">عرض الزبائن</button>
+        </div>
+
+        <div id="statusMsg"></div>
+
+        <table id="customersTable" style="display: none;">
+            <thead>
+                <tr>
+                    <th>رقم الهاتف</th>
+                    <th>تاريخ ووقت الزيارة</th>
+                    <th>الموقع (GPS)</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <!-- بيانات الزبائن ستظهر هنا تلقائياً -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Firebase Scripts -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+        import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD3BNdw99hee_Nck-R7e3zNFYlkEMCsR3Y",
+            authDomain: "mansik-3a5f7.firebaseapp.com",
+            projectId: "mansik-3a5f7",
+            storageBucket: "mansik-3a5f7.firebasestorage.app",
+            messagingSenderId: "979503666389",
+            appId: "1:979503666389:web:428f2b14de3a89a2a9be5c",
+            measurementId: "G-GV774TQEGQ"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const loadBtn = document.getElementById('loadBtn');
+        const shopCodeInput = document.getElementById('shopCodeInput');
+        const statusMsg = document.getElementById('statusMsg');
+        const customersTable = document.getElementById('customersTable');
+        const tableBody = document.getElementById('tableBody');
+
+        loadBtn.addEventListener('click', async () => {
+            const shopCode = shopCodeInput.value.trim();
+            if (!shopCode) {
+                alert("الرجاء إدخال رمز المحل أولاً!");
+                return;
+            }
+
+            statusMsg.style.color = "#000";
+            statusMsg.textContent = "جاري جلب بيانات الزبائن...";
+            tableBody.innerHTML = "";
+            customersTable.style.display = "none";
+
+            try {
+                const q = query(collection(db, "customers"), where("shopId", "==", shopCode));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    statusMsg.style.color = "red";
+                    statusMsg.textContent = "لا يوجد زبائن مسجلين لهذا المحل حتى الآن.";
+                    return;
+                }
+
+                statusMsg.textContent = "";
+                customersTable.style.display = "table";
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const dateStr = data.timestamp ? new Date(data.timestamp.toDate()).toLocaleString('ar-IQ') : 'وقت غير متوفر';
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${data.phone}</td>
+                        <td>${dateStr}</td>
+                        <td><a href="https://maps.google.com/?q=${data.latitude},${data.longitude}" target="_blank" style="color: #2196F3; text-decoration: none;">فتح الخريطة</a></td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+
+            } catch (error) {
+                console.error("Error fetching data: ", error);
+                statusMsg.style.color = "red";
+                statusMsg.textContent = "حدث خطأ في تحميل البيانات، تأكد من الصلاحيات.";
+            }
+        });
+    </script>
+</body>
+</html>
