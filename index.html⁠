@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مانسيك - تسجيل الولاء</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; background-color: #f4f7f6; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
+        h2 { color: #333; margin-bottom: 10px; }
+        p { color: #666; font-size: 14px; margin-bottom: 20px; }
+        input { width: 100%; padding: 12px; font-size: 16px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; margin-bottom: 15px; text-align: center; }
+        button { background-color: #4CAF50; color: white; border: none; padding: 12px; width: 100%; font-size: 16px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        button:hover { background-color: #45a049; }
+        #message { margin-top: 15px; font-size: 14px; font-weight: bold; }
+        #shopNameDisplay { color: #2196F3; font-weight: bold; margin-bottom: 15px; display: block; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>أهلاً بك في مانسيك</h2>
+        <span id="shopNameDisplay">جاري تحديد المحل...</span>
+        <p>أدخل رقم هاتفك لتسجيل نقاط الولاء والحصول على العرض</p>
+        
+        <form id="loyaltyForm">
+            <input type="tel" id="phone" placeholder="07xxxxxxxx" required pattern="[0-9]{10,11}">
+            <button type="submit">تسجيل رقمي</button>
+        </form>
+        
+        <div id="message"></div>
+    </div>
+
+    <!-- Firebase Scripts -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD3BNdw99hee_Nck-R7e3zNFYlkEMCsR3Y",
+            authDomain: "mansik-3a5f7.firebaseapp.com",
+            projectId: "mansik-3a5f7",
+            storageBucket: "mansik-3a5f7.firebasestorage.app",
+            messagingSenderId: "979503666389",
+            appId: "1:979503666389:web:428f2b14de3a89a2a9be5c",
+            measurementId: "G-GV774TQEGQ"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // التقاط معرف المحل من رابط الصفحة (مثال: ?shop=baghdad_cafe)
+        const urlParams = new URLSearchParams(window.location.search);
+        const shopId = urlParams.get('shop') || 'default_shop';
+        document.getElementById('shopNameDisplay').textContent = `أنت تسجل في فرع / محل: ${shopId}`;
+
+        const form = document.getElementById('loyaltyForm');
+        const messageDiv = document.getElementById('message');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const phone = document.getElementById('phone').value;
+            messageDiv.style.color = "#000";
+            messageDiv.textContent = "جاري حفظ بياناتك وتحديد موقعك...";
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(async (position) => {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+
+                    try {
+                        // حفظ البيانات مع معرف المحل والإحداثيات
+                        await addDoc(collection(db, "customers"), {
+                            shopId: shopId,
+                            phone: phone,
+                            latitude: latitude,
+                            longitude: longitude,
+                            timestamp: serverTimestamp()
+                        });
+
+                        messageDiv.style.color = "green";
+                        messageDiv.textContent = "تم التسجيل بنجاح! شكراً لك.";
+                        form.reset();
+                    } catch (error) {
+                        console.error("Error adding document: ", error);
+                        messageDiv.style.color = "red";
+                        messageDiv.textContent = "حدث خطأ أثناء الحفظ، حاول مرة أخرى.";
+                    }
+                }, (error) => {
+                    messageDiv.style.color = "red";
+                    messageDiv.textContent = "يرجى السماح بالوصول للموقع الجغرافي (GPS) لإتمام التسجيل!";
+                });
+            } else {
+                messageDiv.style.color = "red";
+                messageDiv.textContent = "متصفحك لا يدعم تحديد الموقع الجغرافي.";
+            }
+        });
+    </script>
+</body>
+</html>
